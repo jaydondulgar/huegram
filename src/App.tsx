@@ -24,7 +24,7 @@ function App() {
     fetch('https://greenegunnar.pythonanywhere.com/api/hues/')
       .then((res) => res.json())
       .then((data) =>
-        setHues(data.map((item) => ({...item, color: item.hex_code})))
+        setHues(data.map((item: { hex_code: unknown; }) => ({...item, color: item.hex_code})))
       );
   }, []);
 
