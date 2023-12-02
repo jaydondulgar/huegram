@@ -1,7 +1,7 @@
 //import Menu from './components/Menu'
 import Main from './components/Main'
 import Profile from './components/Profile'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
 
@@ -20,11 +20,18 @@ function App() {
     hues: [ {id:36, color:'#ffa510', username:"kavery", likes: 15}]
   });
 
-  const addNewHue = (color:string ) => 
-  {
+  useEffect(() => {
+    fetch('https://greenegunnar.pythonanywhere.com/api/hues/')
+      .then((res) => res.json())
+      .then((data) =>
+        setHues(data.map((item) => ({...item, color: item.hex_code})))
+      );
+  }, []);
+
+  const addNewHue = (color:string ) => {
       console.log(color)
-      const newHue = {color, username: currentUser.username, id: hues[hues.length-1].id+1 , likes:0};
-      setHues( [...hues, newHue ] );
+      const newHue = {color, username: currentUser.username, id: hues.length+1 , likes:0};
+      setHues( [newHue, ...hues ] );
   }
 
   return (
