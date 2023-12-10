@@ -1,36 +1,31 @@
-import Hue from './Hue'
-import PostHue from './PostHue'
-import Header from './Header'
+import React from 'react';
+import Hue, { HueObject } from './Hue';
+import PostHue from './PostHue';
 
-interface HueObject {
-    color: string,
-    username: string,
-    likes: number
-}
+
 interface Props {
-    hues: HueObject[],
-    addHue: (color:string) => void
+  hues: HueObject[]; // Change this line to specify that hues is an array of HueObject
+  addHue: (color: string) => void;
+  toggleLike: (id: number | string) => void;
+  searchTerm: string;
 }
 
-const Main = (props : Props) => {
+
+const Main: React.FC<Props> = ({ hues, addHue, toggleLike, searchTerm }) => {
+  const filteredHues = hues.filter((hue) =>
+    hue.color.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
   return (
-    <div className='flex flex-col'>
-      <Header></Header>
-      <div className='flex flex-wrap w-full justify-center gap-8 overflow-y-auto pb-4'>
-
-          <PostHue addHue={props.addHue}/>
-
-
-          {props.hues.map(  (hue) => ( 
-              
-              <Hue hue={hue}/>
-        ))}
-
-          
-
-      </div>
+    <div className="flex flex-wrap w-full justify-center gap-8 overflow-y-auto pb-2 pt-4">
+      <PostHue addHue={addHue} />
+      {filteredHues.map((hue) => (
+        <Hue key={hue.id} hue={hue} toggleLike={() => toggleLike(hue.id)} />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default Main
+
+export default Main;
